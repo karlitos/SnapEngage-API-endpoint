@@ -1,4 +1,4 @@
-# REST API that acts as a proxy between Google QPX flight search API
+# REST API endpoint for the SnapEngage API with some  custom visualization.
 The API endpoint prototype with some data visualization for the SnapEngage chat API.
 
 ## Config
