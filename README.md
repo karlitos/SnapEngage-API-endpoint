@@ -1,5 +1,8 @@
 # REST API that acts as a proxy between Google QPX flight search API
-The API endpoint prototype with some data visualization for the snapengage chat API.
+The API endpoint prototype with some data visualization for the SnapEngage chat API.
+
+## Config
+Before start you need to put a corresponding SnapEngage API key to _public/chat.js_ and _config.json_ files.
 
 ### Install
 ```bash
@@ -21,7 +24,3 @@ npm start
 ```bash
 npm run debug
 ```
-
-## Config
-
-...
