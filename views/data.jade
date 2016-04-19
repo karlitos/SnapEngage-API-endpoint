@@ -8,10 +8,10 @@ block content
       .panel.panel-default
         .panel-heading
           h4.panel-title
-            a(data-toggle='collapse', data-parent='#accordion', href='#collapse#{index + 1}') #[strong Chat with id:] #{chat.id}
+            a(data-toggle='collapse', data-parent='#accordion', href='#collapse#{index + 1}' onclick='placePointer(#{chat.latitude}, #{chat.longitude})') #[strong Chat with id:] #{chat.id}
         .panel-collapse.collapse(id="collapse#{index + 1}")
           .panel-body
-            table.table.table-stripped
+            table.table.table-striped
               tr
                 td #[strong Chat from widget with Id:]
                 td #{chat.widget_id}
@@ -30,9 +30,11 @@ block content
               tr
                 td #[strong from IP: ]
                 td #{chat.ip_address}
-            #[h4 Further client details:]
+            h4 Further client details:
             ul
               li #[strong User agent:]  #{chat.user_agent}
               li #[strong Browser:]   #{chat.browser} #[strong and operating system:]  #{chat.os}
               li #[strong Location:]  #{chat.country_code} - #{chat.country} - #[strong lat:] #{chat.latitude}, #[strong lon:] #{chat.longitude}
               li #[strong Language code]  #{chat.language_code}
+
+  include ./map.jade
