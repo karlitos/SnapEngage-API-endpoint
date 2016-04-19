@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
     else {
       //console.log(data);
       //res.json(data);
-      res.render('data', {data: data });
+      res.render('data', {title: 'Chat data visualization', data: data });
     }
   });
 });

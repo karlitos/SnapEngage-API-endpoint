@@ -3,15 +3,36 @@ extends layout
 block content
   h1= 'Visualization of chat data'
   h2= 'List of chats'
-  ol
-  each chat, index in data
-    li #[strong Chat with id #{chat.id}:]
-    ul
-      li  #[strong Chat from widget with Id:] #{chat.widget_id} #[strong from URL:] #{chat.url} #[strong requested by:] #{chat.requested_by}
-      li #[strong Chat description:] #{chat.description} #[strong was created at] #{chat.created_at_date} #[strong from IP: ] +{chat.ip_address}
-      li #[h3 Further client details:]
-      ul
-        li User agent: #{chat.user_agent}
-        li Browser: #{chat.browser} and operating system: #{chat.os}
-        li Location: #{chat.country_code} - #{chat.country} - #[strong lat:] #{chat.latitude}, #[strong lon:] #{chat.longitude}
-        li Language code #{chat.language_code}
+  #accordion.panel-group
+    each chat, index in data
+      .panel.panel-default
+        .panel-heading
+          h4.panel-title
+            a(data-toggle='collapse', data-parent='#accordion', href='#collapse#{index + 1}') #[strong Chat with id:] #{chat.id}
+        .panel-collapse.collapse(id="collapse#{index + 1}")
+          .panel-body
+            table.table.table-stripped
+              tr
+                td #[strong Chat from widget with Id:]
+                td #{chat.widget_id}
+              tr
+                td #[strong from URL:]
+                td #{chat.url}
+              tr
+                td #[strong requested by:]
+                td #{chat.requested_by}
+              tr
+                td #[strong Chat description:]
+                td #{chat.description}
+              tr
+                td #[strong created at]
+                td #{chat.created_at_date}
+              tr
+                td #[strong from IP: ]
+                td #{chat.ip_address}
+            #[h4 Further client details:]
+            ul
+              li #[strong User agent:]  #{chat.user_agent}
+              li #[strong Browser:]   #{chat.browser} #[strong and operating system:]  #{chat.os}
+              li #[strong Location:]  #{chat.country_code} - #{chat.country} - #[strong lat:] #{chat.latitude}, #[strong lon:] #{chat.longitude}
+              li #[strong Language code]  #{chat.language_code}

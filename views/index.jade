@@ -1,10 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p
-    |Welcome!
-    br
-    |#{snapengageMsg}
+  .jumbotron
+    .container
+      h1= title
+      h2 Welcome!
+      p= snapengageMsg
+  a(href='#' onclick='return SnapEngage.startLink();'): img(src='https://www.snapengage.com/statusImage?w=b03e2806-6433-4fb8-96d1-a906cff859c1' alt='Contact us' border='0')
+  .panel.panel-default(style="margin-top:5rem;")
+    .panel-body Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+
 block chat
   script(src='/javascripts/chat.js')
