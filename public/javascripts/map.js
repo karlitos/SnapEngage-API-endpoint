@@ -50,7 +50,7 @@ function placePointer(lat, lng){
     location.attr('cx',function(d) { return map.latLngToLayerPoint(coordinates).x; });
     location.attr('cy',function(d) { return map.latLngToLayerPoint(coordinates).y; });
     location.attr('r',function(d) {
-      return map.getZoom() < 13 ? 0.00932422*Math.pow(2,map.getZoom()) : 0.000688281*Math.pow(2,map.getZoom());
+      return map.getZoom() < 13 ? 0.002*Math.pow(2,map.getZoom()) : 0.0007*Math.pow(2,map.getZoom());
     });
   }
 }
