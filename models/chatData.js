@@ -6,7 +6,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.on('open', function (ref) {
     console.log('Connected to mongo server.');
-    //trying to get collection names
+    // get collection names
     db.db.collectionNames(function (err, names) {
         console.log('Collections', names); // [{ name: 'dbname.myCollection' }]
     });

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= 'Visualization of chat data'
+  h2= 'List of chats'
+  ol
+  each chat, index in data
+    li #[strong Chat with id #{chat.id}:]
+    ul
+      li  #[strong Chat from widget with Id:] #{chat.widget_id} #[strong from URL:] #{chat.url} #[strong requested by:] #{chat.requested_by}
+      li #[strong Chat description:] #{chat.description} #[strong was created at] #{chat.created_at_date} #[strong from IP: ] +{chat.ip_address}
+      li #[h3 Further client details:]
+      ul
+        li User agent: #{chat.user_agent}
+        li Browser: #{chat.browser} and operating system: #{chat.os}
+        li Location: #{chat.country_code} - #{chat.country} - #[strong lat:] #{chat.latitude}, #[strong lon:] #{chat.longitude}
+        li Language code #{chat.language_code}
