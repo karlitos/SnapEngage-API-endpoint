@@ -1,78 +1,98 @@
 // create some chart on startup
 $( document ).ready(function() {
-  // create a new SVG element
+  // property definitions
   var parentDiv = d3.select('#stats');
-  var svg1 = parentDiv.append('svg')
-  .attr('width', parentDiv[0][0].clientWidth)
-  .attr('height', 500);
+    margin = {top: 50, right: 20, bottom: 150, left: 50},
+    width =  parentDiv[0][0].clientWidth - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
   // Define the div for the tooltip
-  var div = d3.select("body").append('div')
-  .attr('class', 'tooltip')
-  .style('opacity', 0);
+  var tooltip = parentDiv.append('div')
+    .attr('class', 'tooltip')
+    .style('opacity', 0);
 
-  var dateTimeFormat = d3.time.format('%Y-%m-%d %H:%M:%S');
+  // time firmat definition
+  var dateTimeFormat = d3.time.format('%m.%d.%Y %H:%M:%S');
 
-  // Add an ordinal scale
+  // scales
   var xScale = d3.scale.ordinal()
-      .domain(d3.map(chatData, function(d) { return d.created_at_date; }))
-      .rangeBands([0, svg1.attr('width')]);
+      .rangeRoundBands([0, width], .05)
+      .domain(chatData.map(function(d) { return new Date (d.created_at_date); }));
 
+  var yScale = d3.scale.linear()
+      .range([height, 0])
+      .domain([0, d3.max(chatData, function(d) { return d.transcripts.length; })]);
+
+  // axis
   var xAxis = d3.svg.axis()
-      .scale(xScale)
-      .orient('bottom')
-      .tickFormat(d3.time.format("%Y-%m-%d"));
+    .scale(xScale)
+    .orient('bottom')
+    .tickFormat(dateTimeFormat);
 
+  var yAxis = d3.svg.axis()
+      .scale(yScale)
+      .orient('left')
+      .ticks(10);
+
+  // create a new SVG element
+  var svg1 = parentDiv.append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  // append x-axis
   svg1.append('g')
-    .attr('transform','translate(0,' + (svg1.attr('height') -5) + ")")
+    //.attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + height + ')')
     .call(xAxis)
+    .selectAll('text')
+    .style('text-anchor', 'end')
+    .attr('dx', '-.8em')
+    .attr('dy', '-.55em')
+    .attr('transform', 'rotate(-90)')
 
-  // create bar graph
-  var bars = svg1.selectAll('rect')
-  .data(chatData)
-  .enter()
-  .append('rect')
-  .attr("fill", function(d) {return 'rgb(0, 0, ' + (d.transcripts.length * 20) + ')';})
-  .attr('x', function(d, i) {return i * (svg1.attr('width') / chatData.length);})  //Bar width of 20 plus 1 for padding
-  .attr('y', function(d) { return svg1.attr('height') - d.transcripts.length*25})  //Height minus scaled data value
-  .attr('width', function(d) { return svg1.attr('width')/chatData.length - 50;})
-  .attr('height', function(d) { return d.transcripts.length*25 });
+  // apend y-axis
+  svg1.append('g')
+    //.attr('class', 'y axis')
+    .call(yAxis)
+    .append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', -35)
+    //.attr('dy', '.71em')
+    .style('text-anchor', 'end')
+    .text('Chat length (messages)');
+
+  var bars = svg1.selectAll('bar')
+    .data(chatData)
+    .enter().append('rect')
+    .attr('fill', function(d) {return 'rgb(0, 0, ' + (d.transcripts.length * 20) + ')';})
+    .attr('x', function(d) { return xScale(new Date(d.created_at_date)); })
+    .attr('width', xScale.rangeBand())
+    .attr('y', function(d) { return yScale(d.transcripts.length); })
+    .attr('height', function(d) { return height - yScale(d.transcripts.length); });
 
   bars.on('mouseover', function(d) {
       d3.select(this)
       .style('stroke-opacity', 1)
       .style('stroke-width', 3)
-      .style('stroke', 'red')
-      div.transition()
+      .style('stroke', 'rgb(250, 183, 52)')
+      tooltip.transition()
       .duration(100)
       .style('opacity', .9);
-      div.html(dateTimeFormat(new Date(d.created_at_date)))
-      .style('left', (d3.event.pageX) + 'px')
-      .style('top', (d3.event.pageY - 30) + 'px');
-    }).on('mouseout', function(d) {
-        d3.select(this)
-        .style('stroke-width', 0)
-        div.transition()
-        .duration(100)
-        .style('opacity', 0);
+      tooltip.html(function() {
+        if (d.user_agent.indexOf('Linux') > -1){var faOsCode = '\uf17c';}
+        else if (d.user_agent.indexOf('Windows') > -1){var faOsCode = '\uf17a';}
+        else if (d.user_agent.indexOf('Apple') > -1){var faOsCode = '\uf179';}
+        else {var faOsCode = '\uf059';}
+        return '<strong>Chat description:</strong>   ' + d.description + ' - <strong>OS:</strong> ' + faOsCode + '  - <strong> - from IP: </strong> ' + d.ip_address + '<strong> - from location: </strong>' + d.country + ' - <strong>requested by: </strong>' + d.requested_by;
+      })
+    })
+    .on('mouseout', function(d) {
+      d3.select(this)
+      .style('stroke-width', 0)
+      tooltip.transition()
+      .duration(100)
+      .style('opacity', 0);
       });
-
-  // create labels
-  var labels =  svg1.selectAll('text')
-  .data(chatData)
-  .enter()
-  .append('text')
-  .text(function(d) {
-    if (d.user_agent.indexOf('Linux') > -1){var faOsCode = '\uf17c';}
-    else if (d.user_agent.indexOf('Windows') > -1){var faOsCode = '\uf17a';}
-    else if (d.user_agent.indexOf('Apple') > -1){var faOsCode = '\uf179';}
-    else {var faOsCode = '\uf059';}
-    return 'Chat messages: ' + d.transcripts.length + ' -  OS: ' + faOsCode;
-  })
-  .attr('x', function(d, i) { return i * (svg1.attr('width') / chatData.length ) +25; })
-  .attr('y', function(d) {return svg1.attr('height') - d.transcripts.length*25 + 25; })
-  .attr('font-family', 'FontAwesome')
-  .attr('font-size', '20px')
-  .attr('fill', 'white')
-
   });

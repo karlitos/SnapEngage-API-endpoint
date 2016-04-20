@@ -6,7 +6,7 @@ var ChatDataModel = require('../models/chatData');
 router.get('/', function(req, res, next) {
   ChatDataModel.find(function(err, data) {
     if (err) {
-      console.log('ERROR');
+      //console.log('ERROR');
       //res.send(err);
       next(err);
     }
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 /* POST data. */
 router.post('/', function(req, res, next) {
-  console.log('New POST request recieved', req.body);
+  //console.log('New POST request recieved', req.body);
   var chatData = new ChatDataModel();      // create a new instance of the chat data model
   chatData.id = req.body.id;
   chatData.widget_id = req.body.widget_id;
