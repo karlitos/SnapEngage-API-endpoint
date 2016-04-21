@@ -1,5 +1,6 @@
 h3 Chat stats
 #stats
-script(type='text/javascript').
-  var chatData = !{JSON.stringify(data)};
+
 script(src='/javascripts/stats.js')
+script(type='text/javascript').
+  $( document ).ready(function() {drawStats(!{JSON.stringify(data)});})

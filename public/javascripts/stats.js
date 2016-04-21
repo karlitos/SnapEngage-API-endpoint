@@ -1,10 +1,11 @@
-// create some chart on startup
-$( document ).ready(function() {
-  // property definitions
-  var parentDiv = d3.select('#stats');
-    margin = {top: 50, right: 20, bottom: 150, left: 50},
-    width =  parentDiv[0][0].clientWidth - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+// property definitions
+var parentDiv = d3.select('#stats');
+  margin = {top: 50, right: 20, bottom: 150, left: 50},
+  width =  parentDiv[0][0].clientWidth - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+
+// function responsible of the actual visualization
+function drawStats(chatData) {
 
   // Define the div for the tooltip
   var tooltip = parentDiv.append('div')
@@ -97,4 +98,4 @@ $( document ).ready(function() {
       .duration(100)
       .style('opacity', 0);
       });
-  });
+  }
