@@ -13,11 +13,13 @@ $( document ).ready(function() {
 
   // time firmat definition
   var dateTimeFormat = d3.time.format('%m.%d.%Y %H:%M:%S');
+  //var	parseDate = d3.time.format('%Y-%m-%dT%H:%I:%S.%LZ').parse;
+  var parseDate = d3.time.format.iso.parse;
 
   // scales
   var xScale = d3.scale.ordinal()
       .rangeRoundBands([0, width], .05)
-      .domain(chatData.map(function(d) { return new Date (d.created_at_date); }));
+      .domain(chatData.sort(function(a, b) { return parseDate(a.created_at_date) - parseDate(b.created_at_date); }).map(function(d) { return parseDate(d.created_at_date); }));
 
   var yScale = d3.scale.linear()
       .range([height, 0])
@@ -67,7 +69,7 @@ $( document ).ready(function() {
     .data(chatData)
     .enter().append('rect')
     .attr('fill', function(d) {return 'rgb(0, 0, ' + (d.transcripts.length * 20) + ')';})
-    .attr('x', function(d) { return xScale(new Date(d.created_at_date)); })
+    .attr('x', function(d) { return xScale(parseDate(d.created_at_date)); })
     .attr('width', xScale.rangeBand())
     .attr('y', function(d) { return yScale(d.transcripts.length); })
     .attr('height', function(d) { return height - yScale(d.transcripts.length); });
